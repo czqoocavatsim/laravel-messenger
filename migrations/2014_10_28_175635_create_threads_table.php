@@ -17,6 +17,9 @@ class CreateThreadsTable extends Migration
         Schema::create(Models::table('threads'), function (Blueprint $table) {
             $table->increments('id');
             $table->string('subject');
+            $table->uuid('related_model_uuid')->nullable();
+            $table->bigInteger('related_model_id')->nullable();
+            $table->string('related_model_type')->nullable();
             $table->timestamps();
         });
     }

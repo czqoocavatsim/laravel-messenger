@@ -35,7 +35,7 @@ class Thread extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['subject'];
+    protected $fillable = ['subject', 'related_model_uuid', 'related_model_id', 'related_model_type'];
 
     /**
      * The attributes that should be mutated to date's.
@@ -120,6 +120,18 @@ class Thread extends Eloquent
         }
 
         return $this->creatorCache;
+    }
+
+    public function relatedModel()
+    {
+        $model = app("App\\Models\\" . $this->related_model_type);
+        if ($this->related_model_id === null && $this->related_model_uuid === null) return null;
+
+        if ($this->related_model_id) {
+            return $model::where('id', $this->related_model_id)->first();
+        } else {
+            return $model::whereId($this->related_model_uuid)->first();
+        }
     }
 
     /**
